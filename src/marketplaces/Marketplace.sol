@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {Auth} from "@rari-capital/solmate/src/auth/Auth.sol";
 
@@ -42,17 +42,9 @@ abstract contract Marketplace is Auth {
         uint256[] amounts
     );
 
-    event OrderBid(
-        uint256 indexed orderId,
-        address indexed bidder,
-        uint256 bid
-    );
+    event OrderBid(uint256 indexed orderId, address indexed bidder, uint256 bid);
 
-    event OrderFilled(
-        uint256 indexed orderId,
-        address indexed taker,
-        uint256 paid
-    );
+    event OrderFilled(uint256 indexed orderId, address indexed taker, uint256 paid);
 
     event OrderCancelled(uint256 indexed orderId);
 
@@ -109,10 +101,8 @@ abstract contract Marketplace is Auth {
         uint256[] calldata tokenIds,
         uint256[] calldata amounts
     ) external returns (uint256) {
-        if (
-            kind == OrderKind.Auction &&
-            _duration(openFrom, openTo) > MAXIMUM_DURATION_AUCTION
-        ) revert("MAXIMUM_DURATION_AUCTION");
+        if (kind == OrderKind.Auction && _duration(openFrom, openTo) > MAXIMUM_DURATION_AUCTION)
+            revert("MAXIMUM_DURATION_AUCTION");
 
         _deposit(msg.sender, tokenContract, tokenIds, amounts);
 
@@ -134,36 +124,18 @@ abstract contract Marketplace is Auth {
             paidAmount: 0
         });
 
-        emit OrderCreated(
-            orderId,
-            kind,
-            openFrom,
-            openTo,
-            msg.sender,
-            price,
-            tokenContract,
-            tokenIds,
-            amounts
-        );
+        emit OrderCreated(orderId, kind, openFrom, openTo, msg.sender, price, tokenContract, tokenIds, amounts);
 
         return orderId;
     }
 
     function cancelOrder(uint256 orderId) external {
         Order memory order_ = order[orderId];
-        require(
-            order_.maker == msg.sender || isAuthorized(msg.sender, msg.sig),
-            "INVALID_SENDER"
-        );
+        require(order_.maker == msg.sender || isAuthorized(msg.sender, msg.sig), "INVALID_SENDER");
         require(order_.open, "ALREADY_CANCELED");
         require(order_.bidder == address(0), "AUCTION_STARTED");
 
-        _withdraw(
-            order_.maker,
-            order_.tokenContract,
-            order_.tokenIds,
-            order_.amounts
-        );
+        _withdraw(order_.maker, order_.tokenContract, order_.tokenIds, order_.amounts);
 
         order_.open = false;
         order[orderId] = order_;
@@ -202,10 +174,7 @@ abstract contract Marketplace is Auth {
 
         if (order_.kind == OrderKind.Direct) {
             require(order_.openFrom <= block.timestamp, "NOT_STARTED");
-            require(
-                order_.openTo == 0 || order_.openTo > block.timestamp,
-                "ENDED"
-            );
+            require(order_.openTo == 0 || order_.openTo > block.timestamp, "ENDED");
             require(order_.price <= msg.value, "INVALID_AMOUNT");
 
             order_.taker = msg.sender;
@@ -213,8 +182,7 @@ abstract contract Marketplace is Auth {
         } else {
             require(order_.bidder != address(0), "NO_BIDDER");
             require(
-                (order_.bidder == msg.sender &&
-                    order_.openTo <= block.timestamp) ||
+                (order_.bidder == msg.sender && order_.openTo <= block.timestamp) ||
                     order_.maker == msg.sender ||
                     isAuthorized(msg.sender, msg.sig),
                 "LemonadeMarketplace: must be the maker or final bidder to fill auction order"
@@ -241,12 +209,7 @@ abstract contract Marketplace is Auth {
             }
         }
 
-        _withdraw(
-            order_.taker,
-            order_.tokenContract,
-            order_.tokenIds,
-            order_.amounts
-        );
+        _withdraw(order_.taker, order_.tokenContract, order_.tokenIds, order_.amounts);
 
         emit OrderFilled(orderId, order_.taker, order_.paidAmount);
     }
@@ -255,11 +218,7 @@ abstract contract Marketplace is Auth {
     /// Internal
     /// -----------------------------------------------------------------------
 
-    function _duration(uint256 openFrom, uint256 openTo)
-        private
-        view
-        returns (uint256)
-    {
+    function _duration(uint256 openFrom, uint256 openTo) private view returns (uint256) {
         uint256 start = openFrom < block.timestamp ? block.timestamp : openFrom;
         uint256 end = openTo == 0 ? type(uint256).max : openTo;
 

@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: MIT
-
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import "@openzeppelin/contracts/token/ERC721/ERC721.sol";
 import "@openzeppelin/contracts/access/Ownable.sol";
@@ -42,10 +41,7 @@ contract GBC is Context, Ownable, ERC721Enumerable {
 
     function adminMint(uint256 _mintAmount, address _to) external onlyOwner {
         for (uint256 i = 1; i <= _mintAmount; i++) {
-            require(
-                _tokenIdTracker.current() <= max,
-                "Transaction exceeds max mint amount"
-            );
+            require(_tokenIdTracker.current() <= max, "Transaction exceeds max mint amount");
             _mint(_to, _tokenIdTracker.current());
             _tokenIdTracker.increment();
         }
@@ -53,50 +49,23 @@ contract GBC is Context, Ownable, ERC721Enumerable {
 
     function claim(bytes memory sig) external {
         require(wlMintStarted == true, "WL Mint not started yet");
-        require(
-            checkSignature(sig, _msgSender()) == true,
-            "Signature not valid"
-        );
-        require(
-            blacklist[_msgSender()] == false,
-            "This address was already used"
-        );
-        require(
-            _tokenIdTracker.current() <= max,
-            "Transaction exceeds max mint amount"
-        );
+        require(checkSignature(sig, _msgSender()) == true, "Signature not valid");
+        require(blacklist[_msgSender()] == false, "This address was already used");
+        require(_tokenIdTracker.current() <= max, "Transaction exceeds max mint amount");
         _mint(_msgSender(), _tokenIdTracker.current());
         _tokenIdTracker.increment();
         blacklist[_msgSender()] = true;
     }
 
-    function whitelistMint(uint256 _mintAmount, bytes memory sig)
-        external
-        payable
-    {
+    function whitelistMint(uint256 _mintAmount, bytes memory sig) external payable {
         require(publicSaleStarted == true, "Public Sale not started yet");
         require(wlMintStarted == true, "WL Mint not started yet");
-        require(
-            _mintAmount <= maxMintPerTx,
-            "Exceeds max amount per transaction allowed"
-        );
-        require(
-            checkSignature(sig, _msgSender()) == true,
-            "Signature is not valid"
-        );
-        require(
-            blacklist[_msgSender()] == false,
-            "This whitelisted address was already used"
-        );
-        require(
-            msg.value >= cost * (_mintAmount - 1),
-            "Not enough ether provided"
-        );
+        require(_mintAmount <= maxMintPerTx, "Exceeds max amount per transaction allowed");
+        require(checkSignature(sig, _msgSender()) == true, "Signature is not valid");
+        require(blacklist[_msgSender()] == false, "This whitelisted address was already used");
+        require(msg.value >= cost * (_mintAmount - 1), "Not enough ether provided");
         for (uint256 i = 1; i <= _mintAmount; i++) {
-            require(
-                _tokenIdTracker.current() <= max,
-                "Transaction exceeds max mint amount"
-            );
+            require(_tokenIdTracker.current() <= max, "Transaction exceeds max mint amount");
             _mint(_msgSender(), _tokenIdTracker.current());
             _tokenIdTracker.increment();
         }
@@ -105,16 +74,10 @@ contract GBC is Context, Ownable, ERC721Enumerable {
 
     function mint(uint256 _mintAmount) external payable {
         require(publicSaleStarted == true, "Public Sale not started yet");
-        require(
-            _mintAmount <= maxMintPerTx,
-            "Exceeds max amount per transaction allowed"
-        );
+        require(_mintAmount <= maxMintPerTx, "Exceeds max amount per transaction allowed");
         require(msg.value >= cost * _mintAmount, "Not enough ether provided");
         for (uint256 i = 1; i <= _mintAmount; i++) {
-            require(
-                _tokenIdTracker.current() <= max,
-                "Transaction exceeds max mint amount"
-            );
+            require(_tokenIdTracker.current() <= max, "Transaction exceeds max mint amount");
             _mint(_msgSender(), _tokenIdTracker.current());
             _tokenIdTracker.increment();
         }
@@ -134,10 +97,7 @@ contract GBC is Context, Ownable, ERC721Enumerable {
     }
 
     function setWLSigner(address signer) external onlyOwner {
-        require(
-            signer != 0x0000000000000000000000000000000000000000,
-            "Can't set WL signer as 0x00 address"
-        );
+        require(signer != 0x0000000000000000000000000000000000000000, "Can't set WL signer as 0x00 address");
         wlSigner = signer;
     }
 
@@ -157,11 +117,7 @@ contract GBC is Context, Ownable, ERC721Enumerable {
         wlMintStarted = true;
     }
 
-    function walletOfOwner(address _owner)
-        public
-        view
-        returns (uint256[] memory)
-    {
+    function walletOfOwner(address _owner) public view returns (uint256[] memory) {
         uint256 ownerTokenCount = balanceOf(_owner);
         uint256[] memory tokenIds = new uint256[](ownerTokenCount);
         for (uint256 i; i < ownerTokenCount; i++) {
@@ -185,31 +141,17 @@ contract GBC is Context, Ownable, ERC721Enumerable {
     /**
      * @dev See {IERC165-supportsInterface}.
      */
-    function supportsInterface(bytes4 interfaceId)
-        public
-        view
-        virtual
-        override(ERC721Enumerable)
-        returns (bool)
-    {
+    function supportsInterface(bytes4 interfaceId) public view virtual override(ERC721Enumerable) returns (bool) {
         return super.supportsInterface(interfaceId);
     }
 
-    function checkSignature(bytes memory sig, address sender)
-        private
-        view
-        returns (bool)
-    {
+    function checkSignature(bytes memory sig, address sender) private view returns (bool) {
         bytes32 hash = keccak256(abi.encodePacked(address(this), sender));
         address signer = recover(hash, sig);
         return (wlSigner == signer);
     }
 
-    function recover(bytes32 hash, bytes memory sig)
-        private
-        pure
-        returns (address)
-    {
+    function recover(bytes32 hash, bytes memory sig) private pure returns (address) {
         bytes32 r;
         bytes32 s;
         uint8 v;

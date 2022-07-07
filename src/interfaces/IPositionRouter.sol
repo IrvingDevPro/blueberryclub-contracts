@@ -1,17 +1,19 @@
 //SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 interface IPositionRouter {
-
     function BASIS_POINTS_DIVISOR() external view returns (uint256);
 
     function admin() external view returns (address);
 
     function vault() external view returns (address);
+
     function router() external view returns (address);
+
     function weth() external view returns (address);
 
     function depositFee() external view returns (uint256);
+
     function increasePositionBufferBps() external view returns (uint256);
 
     function referralStorage() external view returns (address);
@@ -19,6 +21,7 @@ interface IPositionRouter {
     function feeReserves(address) external view returns (uint256);
 
     function maxGlobalLongSizes(address) external view returns (uint256);
+
     function maxGlobalShortSizes(address) external view returns (uint256);
 
     event SetDepositFee(uint256 depositFee);
@@ -27,11 +30,7 @@ interface IPositionRouter {
     event SetAdmin(address admin);
     event WithdrawFees(address token, address receiver, uint256 amount);
 
-    event SetMaxGlobalSizes(
-        address[] tokens,
-        uint256[] longSizes,
-        uint256[] shortSizes
-    );
+    event SetMaxGlobalSizes(address[] tokens, uint256[] longSizes, uint256[] shortSizes);
 
     event IncreasePositionReferral(
         address account,
@@ -83,23 +82,29 @@ interface IPositionRouter {
     function minExecutionFee() external view returns (uint256);
 
     function minBlockDelayKeeper() external view returns (uint256);
+
     function minTimeDelayPublic() external view returns (uint256);
+
     function maxTimeDelay() external view returns (uint256);
 
     function isLeverageEnabled() external view returns (bool);
 
     function increasePositionRequestKeys() external view returns (bytes32[] memory);
+
     function decreasePositionRequestKeys() external view returns (bytes32[] memory);
 
     function increasePositionRequestKeysStart() external view returns (uint256);
+
     function decreasePositionRequestKeysStart() external view returns (uint256);
 
     function isPositionKeeper(address) external view returns (bool);
 
     function increasePositionsIndex(address) external view returns (uint256);
+
     function increasePositionRequests(bytes32) external view returns (IncreasePositionRequest memory);
 
     function decreasePositionsIndex(address) external view returns (uint256);
+
     function decreasePositionRequests(bytes32) external view returns (DecreasePositionRequest memory);
 
     event CreateIncreasePosition(
@@ -234,7 +239,15 @@ interface IPositionRouter {
         bool _withdrawETH
     ) external payable;
 
-    function getRequestQueueLengths() external view returns (uint256, uint256, uint256, uint256);
+    function getRequestQueueLengths()
+        external
+        view
+        returns (
+            uint256,
+            uint256,
+            uint256,
+            uint256
+        );
 
     function executeIncreasePosition(bytes32 _key, address payable _executionFeeReceiver) external returns (bool);
 

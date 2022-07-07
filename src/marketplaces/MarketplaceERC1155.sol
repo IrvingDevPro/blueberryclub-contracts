@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: MIT
 
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {Marketplace} from "./Marketplace.sol";
 
@@ -20,13 +20,7 @@ contract MarketplaceERC1155 is Marketplace, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts
     ) internal override {
-        ERC1155(tokenContract).safeBatchTransferFrom(
-            from,
-            address(this),
-            ids,
-            amounts,
-            ""
-        );
+        ERC1155(tokenContract).safeBatchTransferFrom(from, address(this), ids, amounts, "");
     }
 
     function _withdraw(
@@ -35,12 +29,6 @@ contract MarketplaceERC1155 is Marketplace, ERC1155TokenReceiver {
         uint256[] memory ids,
         uint256[] memory amounts
     ) internal override {
-        ERC1155(tokenContract).safeBatchTransferFrom(
-            address(this),
-            to,
-            ids,
-            amounts,
-            ""
-        );
+        ERC1155(tokenContract).safeBatchTransferFrom(address(this), to, ids, amounts, "");
     }
 }

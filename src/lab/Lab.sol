@@ -1,5 +1,5 @@
-//SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.9;
 
 import {ERC1155} from "@rari-capital/solmate/src/tokens/ERC1155.sol";
 import {Auth, Authority} from "@rari-capital/solmate/src/auth/Auth.sol";
@@ -11,9 +11,7 @@ import {ERC2981} from "@openzeppelin/contracts/token/common/ERC2981.sol";
  * @notice This contract manage the tokens usable by GBC holders
  */
 contract GBCLab is ERC1155, Auth, ERC2981 {
-    constructor(address _owner, Authority _authority)
-        Auth(_owner, _authority)
-    {}
+    constructor(address _owner, Authority _authority) Auth(_owner, _authority) {}
 
     string private _uri;
     mapping(uint256 => string) private _uris;
@@ -80,20 +78,12 @@ contract GBCLab is ERC1155, Auth, ERC2981 {
         _setTokenRoyalty(id, receiver, feeNumerator);
     }
 
-    function setRoyalty(address receiver, uint96 feeNumerator)
-        external
-        requiresAuth
-    {
+    function setRoyalty(address receiver, uint96 feeNumerator) external requiresAuth {
         if (receiver == address(0)) return _deleteDefaultRoyalty();
         _setDefaultRoyalty(receiver, feeNumerator);
     }
 
-    function supportsInterface(bytes4 interfaceId)
-        public
-        pure
-        override(ERC1155, ERC2981)
-        returns (bool)
-    {
+    function supportsInterface(bytes4 interfaceId) public pure override(ERC1155, ERC2981) returns (bool) {
         return
             interfaceId == 0x2a55205a || // ERC165 Interface ID for ERC2981
             interfaceId == 0x01ffc9a7 || // ERC165 Interface ID for ERC165

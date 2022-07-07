@@ -1,12 +1,11 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {Payable} from "./Payable.sol";
 
 error InvalidPaidAmount();
 
 abstract contract Native is Payable {
-
     function _takeMoney() internal {
         uint256 paid = msg.value;
         RECEIVER.transfer(paid);

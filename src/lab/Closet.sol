@@ -1,7 +1,5 @@
-//SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
-
-import "hardhat/console.sol";
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.9;
 
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {GBCLab} from "./Lab.sol";
@@ -68,20 +66,12 @@ contract Closet is ERC1155TokenReceiver {
         return owned;
     }
 
-    function isWearing(uint256 token, uint256 item)
-        external
-        view
-        returns (bool)
-    {
+    function isWearing(uint256 token, uint256 item) external view returns (bool) {
         uint256 index = itemsIndex[token][item];
         return (index != 0 && index != DEAD_INDEX);
     }
 
-    function isWearing(uint256 token, uint256[] memory items)
-        external
-        view
-        returns (bool[] memory)
-    {
+    function isWearing(uint256 token, uint256[] memory items) external view returns (bool[] memory) {
         uint256 length = items.length;
         bool[] memory wearings = new bool[](length);
         for (uint256 i = 0; i < length; i++) {

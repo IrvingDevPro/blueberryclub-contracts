@@ -1,25 +1,15 @@
 {
-  "name": "template-ethereum-contracts",
+  "name": "@gambitdao/gbc-contracts",
   "version": "0.1.0",
-  "description": "Template to develop ethereum smart contracts",
+  "description": "The Bluberry Club contracts",
   "private": true,
   "engines": {
     "node": ">= 14.0.0"
   },
-  "repository": "github:wighawag/template-ethereum-contracts",
-  "author": "wighawag",
-  "license": "MIT",
-  "keywords": [
-    "ethereum",
-    "smart-contracts",
-    "template",
-    "boilerplate",
-    "hardhat",
-    "solidity"
-  ],
   "devDependencies": {
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@0.3.0-beta.12",
-    "@openzeppelin/contracts": "^4.5.0",
+    "@openzeppelin/contracts": "^4.7.0",
+    "@rari-capital/solmate": "^6.4.0",
     "@typechain/ethers-v5": "^10.0.0",
     "@typechain/hardhat": "^6.0.0",
     "@types/chai": "^4.3.1",
@@ -51,7 +41,6 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "prepare": "hardhat typechain",
     "lint": "eslint \"**/*.{js,ts}\" && solhint src/**/*.sol",
     "lint:fix": "eslint --fix \"**/*.{js,ts}\" && solhint --fix src/**/*.sol",
     "format": "prettier --check \"**/*.{ts,js,sol}\"",

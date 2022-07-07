@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {Native} from "./../payment/Native.sol";
 import {Payable} from "./../payment/Payable.sol";
@@ -7,8 +7,6 @@ import {Mintable, MintRule} from "./../base/Mintable.sol";
 import {GBCLab} from "../../../lab/Lab.sol";
 
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
-
-
 
 error TooManyTokens();
 error NftMaxMintable();
@@ -23,26 +21,19 @@ contract Holder is Payable, Native, Mintable {
 
     uint256 public totalNftMinted;
 
-    constructor(uint256 item_,
-                uint208 totalMinted,
-                address _owner,
-                GBCLab lab_,
-                MintRule memory _rule,
-                IERC721 _nft)
+    constructor(
+        uint256 item_,
+        uint208 totalMinted,
+        address _owner,
+        GBCLab lab_,
+        MintRule memory _rule,
+        IERC721 _nft
+    )
         Payable(payable(_owner), item_, lab_, _owner)
-        Mintable(
-            _rule.supply,
-            _rule.cost,
-            _rule.accountLimit,
-            _rule.start,
-            _rule.finish,
-            totalMinted
-        )
+        Mintable(_rule.supply, _rule.cost, _rule.accountLimit, _rule.start, _rule.finish, totalMinted)
     {
         NFT = _nft;
     }
-
-
 
     function mint(uint256[] calldata idList) external payable {
         _mintFor(msg.sender, idList);
@@ -51,7 +42,6 @@ contract Holder is Payable, Native, Mintable {
     function mintFor(address to, uint256[] calldata idList) external payable requiresAuth {
         _mintFor(to, idList);
     }
-
 
     function _mintFor(address to, uint256[] calldata idList) internal {
         if (idList.length > type(uint120).max) revert TooManyTokens();
@@ -71,6 +61,4 @@ contract Holder is Payable, Native, Mintable {
 
         _mint(to, amount);
     }
-
-
 }

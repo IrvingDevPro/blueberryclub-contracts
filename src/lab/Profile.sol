@@ -1,7 +1,5 @@
-//SPDX-License-Identifier: Unlicense
-pragma solidity ^0.8.0;
-
-import "hardhat/console.sol";
+//SPDX-License-Identifier: MIT
+pragma solidity ^0.8.9;
 
 import {IERC721} from "@openzeppelin/contracts/token/ERC721/IERC721.sol";
 import {Auth, Authority} from "@rari-capital/solmate/src/auth/Auth.sol";
@@ -46,8 +44,7 @@ contract Profile is Auth {
 
     function chooseUsername(string memory newUsername) external {
         uint256 length = bytes(newUsername).length;
-        if (length < 1 || length > 8 || isUsernameUsed[newUsername])
-            revert InvalidUsername();
+        if (length < 1 || length > 8 || isUsernameUsed[newUsername]) revert InvalidUsername();
 
         isUsernameUsed[usernameOf[msg.sender]] = false;
         isUsernameUsed[newUsername] = true;
@@ -55,18 +52,12 @@ contract Profile is Auth {
         emit SetUsername(msg.sender, newUsername);
     }
 
-    function chooseMainAndUsername(uint256 tokenId, string memory newUsername)
-        external
-    {
+    function chooseMainAndUsername(uint256 tokenId, string memory newUsername) external {
         this.chooseMain(tokenId);
         this.chooseUsername(newUsername);
     }
 
-    function getDataOf(address account)
-        external
-        view
-        returns (uint256 tokenId, string memory username)
-    {
+    function getDataOf(address account) external view returns (uint256 tokenId, string memory username) {
         tokenId = mainOf[account];
         address owner = GBC.ownerOf(tokenId);
         if (!isHandler[owner] && owner != account) revert NotOwner();
@@ -74,10 +65,7 @@ contract Profile is Auth {
         username = usernameOf[account];
     }
 
-    function setHandler(address handler, bool _isHandler)
-        external
-        requiresAuth
-    {
+    function setHandler(address handler, bool _isHandler) external requiresAuth {
         isHandler[handler] = _isHandler;
     }
 }

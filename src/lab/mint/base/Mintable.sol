@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {Payable} from "../payment/Payable.sol";
 
@@ -32,13 +32,13 @@ abstract contract Mintable is Payable {
     uint64 public immutable START;
     uint64 public immutable FINISH;
 
-    constructor(uint120 _supply,
-                uint208 _cost,
-                uint192 _accountLimit,
-                uint64 _start,
-                uint64 _finish,
-
-                uint208 _totalMinted
+    constructor(
+        uint120 _supply,
+        uint208 _cost,
+        uint192 _accountLimit,
+        uint64 _start,
+        uint64 _finish,
+        uint208 _totalMinted
     ) {
         SUPPLY = _supply;
         COST = _cost;

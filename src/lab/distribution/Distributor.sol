@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {Auth, Authority} from "@rari-capital/solmate/src/auth/Auth.sol";
 import {ERC721} from "@rari-capital/solmate/src/tokens/ERC721.sol";
@@ -14,12 +14,7 @@ contract Distributor is Auth {
     uint256 private constant GBC_SUPPLY = 10000;
 
     event Deposit(address indexed depositor, uint256 amount);
-    event Claim(
-        address indexed operator,
-        address indexed account,
-        address indexed receiver,
-        uint256 amount
-    );
+    event Claim(address indexed operator, address indexed account, address indexed receiver, uint256 amount);
 
     mapping(uint256 => mapping(uint256 => bool)) public isTokenUsed;
 
@@ -27,9 +22,7 @@ contract Distributor is Auth {
 
     ERC721 public immutable token;
 
-    constructor(Authority authority, ERC721 token_)
-        Auth(address(0), authority)
-    {
+    constructor(Authority authority, ERC721 token_) Auth(address(0), authority) {
         token = token_;
     }
 
@@ -37,11 +30,7 @@ contract Distributor is Auth {
         _deposit(msg.value);
     }
 
-    function claim(address account, uint256[] memory tokens)
-        external
-        requiresAuth
-        returns (uint256)
-    {
+    function claim(address account, uint256[] memory tokens) external requiresAuth returns (uint256) {
         return _claim(account, payable(msg.sender), tokens);
     }
 

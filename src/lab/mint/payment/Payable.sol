@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.0;
+pragma solidity ^0.8.9;
 
 import {ERC20} from "@rari-capital/solmate/src/tokens/ERC20.sol";
 import {Auth, Authority} from "@rari-capital/solmate/src/auth/Auth.sol";
@@ -13,11 +13,11 @@ abstract contract Payable is Auth {
     GBCLab public immutable LAB;
     address payable public immutable RECEIVER;
 
-
-    constructor(address payable receiver_,
-                uint256 item_,
-                GBCLab lab_,
-                address _owner
+    constructor(
+        address payable receiver_,
+        uint256 item_,
+        GBCLab lab_,
+        address _owner
     ) Auth(_owner, Authority(address(0))) {
         ITEM = item_;
         LAB = lab_;
@@ -35,10 +35,7 @@ abstract contract Payable is Auth {
         emit Rescue(address(token), to, amount);
     }
 
-    function rescueTokens(address payable to, uint256 amount)
-        external
-        requiresAuth
-    {
+    function rescueTokens(address payable to, uint256 amount) external requiresAuth {
         to.transfer(amount);
         emit Rescue(address(0), to, amount);
     }

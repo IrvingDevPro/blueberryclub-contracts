@@ -539,10 +539,15 @@
   resolved "https://registry.yarnpkg.com/hardhat-deploy-ethers/-/hardhat-deploy-ethers-0.3.0-beta.12.tgz#2b18d8c689413984262a12393cada3011c356b7a"
   integrity sha512-sgx4cdhZwb8xDnuni6S0aturxgphMBGUaB1D3em73phhy8+RO9z7KiYeQvZhruXWydM6fdDX4NwGpaSy+MGcqA==
 
-"@openzeppelin/contracts@^4.5.0":
+"@openzeppelin/contracts@^4.7.0":
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/@openzeppelin/contracts/-/contracts-4.7.0.tgz#3092d70ea60e3d1835466266b1d68ad47035a2d5"
   integrity sha512-52Qb+A1DdOss8QvJrijYYPSf32GUg2pGaG/yCxtaA3cu4jduouTdg4XZSMLW9op54m1jH7J8hoajhHKOPsoJFw==
+
+"@rari-capital/solmate@^6.4.0":
+  version "6.4.0"
+  resolved "https://registry.yarnpkg.com/@rari-capital/solmate/-/solmate-6.4.0.tgz#c6ee4110c8075f14b415e420b13bd8bdbbc93d9e"
+  integrity sha512-BXWIHHbG5Zbgrxi0qVYe0Zs+bfx+XgOciVUACjuIApV0KzC0kY8XdO1higusIei/ZKCC+GUKdcdQZflxYPUTKQ==
 
 "@scure/base@~1.1.0":
   version "1.1.1"
