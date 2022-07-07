@@ -24,50 +24,42 @@ const config: HardhatUserConfig = {
   },
   namedAccounts: {
     deployer: 0,
-    simpleERC20Beneficiary: 1,
+    alice: 1,
+    bob: 2,
+    mark: 3,
   },
   networks: addForkConfiguration({
     hardhat: {
-      initialBaseFeePerGas: 0, // to fix : https://github.com/sc-forks/solidity-coverage/issues/652, see https://github.com/sc-forks/solidity-coverage/issues/652#issuecomment-896330136
+      initialBaseFeePerGas: 0,
     },
     localhost: {
       url: node_url('localhost'),
       accounts: accounts(),
     },
-    staging: {
-      url: node_url('rinkeby'),
-      accounts: accounts('rinkeby'),
+    ropsten: {
+      url: node_url('ropsten'),
+      accounts: accounts('ropsten'),
     },
-    production: {
-      url: node_url('mainnet'),
-      accounts: accounts('mainnet'),
-    },
-    mainnet: {
-      url: node_url('mainnet'),
-      accounts: accounts('mainnet'),
-    },
-    rinkeby: {
-      url: node_url('rinkeby'),
-      accounts: accounts('rinkeby'),
-    },
-    kovan: {
-      url: node_url('kovan'),
-      accounts: accounts('kovan'),
-    },
-    goerli: {
-      url: node_url('goerli'),
-      accounts: accounts('goerli'),
+    arbitrum: {
+      url: node_url('arbitrum'),
+      accounts: accounts('arbitrum'),
     },
   }),
   paths: {
     sources: 'src',
   },
   gasReporter: {
-    currency: 'USD',
-    gasPrice: 100,
     enabled: process.env.REPORT_GAS ? true : false,
+    currency: 'EUR',
     coinmarketcap: process.env.COINMARKETCAP_API_KEY,
-    maxMethodDiff: 10,
+    gasPrice: 100,
+    token: 'ETH',
+    gasPriceApi: 'https://api.arbiscan.io/api?module=proxy&action=eth_gasPrice',
+    outputFile: 'report.txt',
+    onlyCalledMethods: false,
+    showTimeSpent: true,
+    src: 'src',
+    showMethodSig: true,
   },
   typechain: {
     outDir: 'typechain',
@@ -79,18 +71,11 @@ const config: HardhatUserConfig = {
   external: process.env.HARDHAT_FORK
     ? {
         deployments: {
-          // process.env.HARDHAT_FORK will specify the network that the fork is made from.
-          // these lines allow it to fetch the deployments from the network being forked from both for node and deploy task
           hardhat: ['deployments/' + process.env.HARDHAT_FORK],
           localhost: ['deployments/' + process.env.HARDHAT_FORK],
         },
       }
     : undefined,
-
-  tenderly: {
-    project: 'template-ethereum-contracts',
-    username: process.env.TENDERLY_USERNAME as string,
-  },
 };
 
 export default config;
