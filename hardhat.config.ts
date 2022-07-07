@@ -36,9 +36,9 @@ const config: HardhatUserConfig = {
       url: node_url('localhost'),
       accounts: accounts(),
     },
-    ropsten: {
-      url: node_url('ropsten'),
-      accounts: accounts('ropsten'),
+    abitrum_rinkeby: {
+      url: node_url('abitrum_rinkeby'),
+      accounts: accounts('abitrum_rinkeby'),
     },
     arbitrum: {
       url: node_url('arbitrum'),
