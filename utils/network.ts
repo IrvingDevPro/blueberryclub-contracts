@@ -1,5 +1,6 @@
 import 'dotenv/config';
 import {HDAccountsUserConfig, HttpNetworkUserConfig, NetworksUserConfig} from 'hardhat/types';
+
 export function node_url(networkName: string): string {
   if (networkName) {
     const uri = process.env['ETH_NODE_URI_' + networkName.toUpperCase()];
@@ -25,6 +26,48 @@ export function node_url(networkName: string): string {
     throw new Error(`invalid uri or network not supported by node provider : ${uri}`);
   }
   return uri;
+}
+
+export function etherscan_url(networkName: string): string {
+  if (networkName) {
+    const url = process.env['ETHERSCAN_URL_' + networkName.toUpperCase()];
+    if (url && url !== '') {
+      return url;
+    }
+  }
+
+  if (networkName === 'localhost') {
+    return '';
+  }
+
+  return process.env.ETHERSCAN_URL ?? '';
+}
+
+export function etherscan_api(networkName: string): string {
+  if (networkName) {
+    const url = process.env['ETHERSCAN_API_KEY_' + networkName.toUpperCase()];
+    if (url && url !== '') {
+      return url;
+    }
+  }
+
+  if (networkName === 'localhost') {
+    return '';
+  }
+
+  return process.env.ETHERSCAN_API_KEY ?? '';
+}
+
+export function etherscan(networkName: string): {etherscan: {apiKey: string; apiUrl: string}} {
+  const apiUrl = etherscan_url(networkName);
+  const apiKey = etherscan_api(networkName);
+
+  return {
+    etherscan: {
+      apiKey,
+      apiUrl,
+    },
+  };
 }
 
 export function getMnemonic(networkName?: string): string {

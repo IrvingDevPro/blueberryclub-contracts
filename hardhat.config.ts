@@ -6,7 +6,7 @@ import 'hardhat-gas-reporter';
 import '@typechain/hardhat';
 import 'solidity-coverage';
 import 'hardhat-deploy-tenderly';
-import {node_url, accounts, addForkConfiguration} from './utils/network';
+import {node_url, accounts, addForkConfiguration, etherscan} from './utils/network';
 
 const config: HardhatUserConfig = {
   solidity: {
@@ -36,13 +36,15 @@ const config: HardhatUserConfig = {
       url: node_url('localhost'),
       accounts: accounts(),
     },
-    abitrum_rinkeby: {
-      url: node_url('abitrum_rinkeby'),
-      accounts: accounts('abitrum_rinkeby'),
+    arbitrum_rinkeby: {
+      url: node_url('arbitrum_rinkeby'),
+      accounts: accounts('arbitrum_rinkeby'),
+      verify: etherscan('arbitrum_rinkeby'),
     },
     arbitrum: {
       url: node_url('arbitrum'),
       accounts: accounts('arbitrum'),
+      verify: etherscan('arbitrum'),
     },
   }),
   paths: {
