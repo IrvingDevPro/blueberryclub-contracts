@@ -1,7 +1,7 @@
 import {HardhatRuntimeEnvironment} from 'hardhat/types';
 import 'hardhat-deploy';
 import '@nomiclabs/hardhat-ethers';
-import {BigNumberish} from 'ethers';
+import {BigNumberish, ethers} from 'ethers';
 
 import {Log} from '@ethersproject/abstract-provider';
 
@@ -16,7 +16,7 @@ export const getDeployedAddress = (logs: Log[]) => {
     console.log(`Event Signature: ${eventSignature}`);
 
     if (eventSignature == '0x83f35c3d500677e8300bf0bbf471882d821904d2b410c5df88c5ca5d3ec0907a') {
-      result = topics[2];
+      result = ethers.utils.defaultAbiCoder.decode(['address'], topics[2])[0];
     }
   });
 
