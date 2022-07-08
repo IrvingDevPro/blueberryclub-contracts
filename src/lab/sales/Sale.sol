@@ -14,6 +14,7 @@ abstract contract Sale is Clone {
 
     GBCLab public constant LAB = GBCLab(0xF4f935F4272e6FD9C779cF0036589A63b48d77A7);
     Authority public constant POLICE = Authority(0x575F40E8422EfA696108dAFD12cD8d6366982416);
+    address public constant TREASURY = 0xDe2DBb7f1C893Cc5E2f51CbFd2A73C8a016183a0;
 
     function price() public pure returns (uint256) {
         return _getArgUint256(0);
@@ -47,16 +48,12 @@ abstract contract Sale is Clone {
         return ERC20(_getArgAddress(224));
     }
 
-    function treasury() public pure returns (address) {
-        return _getArgAddress(244);
-    }
-
     modifier requiresAuth() virtual {
         require(POLICE.canCall(msg.sender, address(this), msg.sig), "UNAUTHORIZED");
         _;
     }
 
-    mapping(address => uint256) public accountMintCountOf;
+    mapping(address => uint256) public minted;
 
     uint256 public totalMinted;
 
@@ -64,24 +61,22 @@ abstract contract Sale is Clone {
         require(amount <= transaction(), "MAX_TRANSACTION");
         uint256 totalMinted_ = totalMinted + amount;
         require(totalMinted_ <= supply(), "MAX_SUPPLY");
-        uint256 minted_ = accountMintCountOf[to] + amount;
+        uint256 minted_ = minted[to] + amount;
         require(minted_ <= wallet(), "MAX_WALLET");
         require(block.timestamp >= start(), "NOT_STARTED");
         require(block.timestamp < end(), "FINISHED");
 
         totalMinted = totalMinted_;
-        accountMintCountOf[to] = minted_;
+        minted[to] = minted_;
 
         ERC20 currency_ = currency();
 
         if (address(currency_) == address(0)) {
-            SafeTransferLib.safeTransferETH(treasury(), amount * price());
+            SafeTransferLib.safeTransferETH(TREASURY, amount * price());
         } else {
-            currency_.safeTransferFrom(msg.sender, treasury(), amount * price());
+            currency_.safeTransferFrom(msg.sender, TREASURY, amount * price());
         }
 
         LAB.mint(to, tokenId(), amount, "");
     }
-
-    function implementation() external pure virtual returns (string memory);
 }

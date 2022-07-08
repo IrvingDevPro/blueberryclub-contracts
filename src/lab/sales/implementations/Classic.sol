@@ -11,8 +11,4 @@ contract ClassicSale is Sale {
     function mintFor(address to, uint256 amount) external requiresAuth {
         _mint(to, amount);
     }
-
-    function implementation() external pure override returns (string memory) {
-        return "classic";
-    }
 }
