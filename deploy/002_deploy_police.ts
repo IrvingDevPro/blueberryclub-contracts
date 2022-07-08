@@ -7,12 +7,12 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
 
   const {deployer} = await getNamedAccounts();
 
-  await deploy('GBC', {
+  await deploy('Police', {
     from: deployer,
-    args: ['Blueberry Club', 'GBC', ''],
+    args: [deployer],
     log: true,
     autoMine: true,
   });
 };
 export default func;
-func.tags = ['GBC'];
+func.tags = ['Police'];

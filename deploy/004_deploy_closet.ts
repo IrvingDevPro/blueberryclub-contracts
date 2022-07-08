@@ -5,14 +5,18 @@ const func: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   const {deployments, getNamedAccounts} = hre;
   const {deploy} = deployments;
 
+  const GBC = await deployments.get('GBC');
+  const Lab = await deployments.get('GBCLab');
+
   const {deployer} = await getNamedAccounts();
 
-  await deploy('GBC', {
+  await deploy('Closet', {
     from: deployer,
-    args: ['Blueberry Club', 'GBC', ''],
+    args: [GBC.address, Lab.address],
     log: true,
     autoMine: true,
   });
 };
 export default func;
-func.tags = ['GBC'];
+func.tags = ['Closet'];
+func.dependencies = ['GBC', 'GBCLab'];
