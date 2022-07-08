@@ -7,6 +7,7 @@
     "node": ">= 14.0.0"
   },
   "devDependencies": {
+    "@ethersproject/abstract-provider": "^5.6.1",
     "@nomiclabs/hardhat-ethers": "npm:hardhat-deploy-ethers@0.3.0-beta.12",
     "@openzeppelin/contracts": "^4.7.0",
     "@rari-capital/solmate": "^6.4.0",
