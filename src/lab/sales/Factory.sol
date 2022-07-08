@@ -2,9 +2,9 @@
 pragma solidity ^0.8.9;
 
 import {ClonesWithImmutableArgs} from "clones-with-immutable-args/ClonesWithImmutableArgs.sol";
-import {Auth, Authority} from "@rari-capital/solmate/src/auth/Auth.sol";
+import {RolesAuthority, Authority} from "@rari-capital/solmate/src/auth/authorities/RolesAuthority.sol";
 
-contract SaleFactory is Auth(msg.sender, Authority(address(0))) {
+contract SaleFactory is RolesAuthority(msg.sender, Authority(address(0))) {
     using ClonesWithImmutableArgs for address;
 
     event NewSale(address indexed implementation, address indexed clone);
