@@ -5,6 +5,7 @@
 const {spawn} = require('child_process');
 const path = require('path');
 require('dotenv').config();
+const {promises: fs} = require('fs')
 
 const commandlineArgs = process.argv.slice(2);
 
@@ -158,6 +159,12 @@ async function performAction(rawArgs) {
   } else if (firstArg === 'tenderly:push') {
     const {fixedArgs} = parseArgs(args, 1, {});
     await execute(`hardhat --network ${fixedArgs[0]} tenderly:push`);
+  } else if (firstArg === 'toggle') {
+    const fake = await fs.readFile(path.resolve(__dirname, "hardhat.config"), 'utf8')
+    const real  = await fs.readFile(path.resolve(__dirname, "hardhat.config.ts"), 'utf8')
+
+    await fs.writeFile(path.resolve(__dirname, "hardhat.config.ts"), fake, 'utf8')
+    await fs.writeFile(path.resolve(__dirname, "hardhat.config"), real, 'utf8')
   }
 }
 
