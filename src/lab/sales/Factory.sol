@@ -9,7 +9,7 @@ contract SaleFactory is Auth(msg.sender, Authority(address(0))) {
 
     event NewSale(address indexed implementation, address indexed clone);
 
-    function deploy(address implementation, bytes memory data) external returns (address clone) {
+    function deploy(address implementation, bytes memory data) external requiresAuth returns (address clone) {
         clone = implementation.clone(data);
 
         emit NewSale(implementation, clone);

@@ -57,7 +57,7 @@ const config: HardhatUserConfig = {
     gasPrice: 100,
     token: 'ETH',
     gasPriceApi: 'https://api.arbiscan.io/api?module=proxy&action=eth_gasPrice',
-    outputFile: 'report.txt',
+    // outputFile: 'report.txt',
     onlyCalledMethods: false,
     showTimeSpent: true,
     src: 'src',
